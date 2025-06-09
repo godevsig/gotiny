@@ -17,7 +17,7 @@ type Decoder struct {
 }
 
 func Unmarshal(buf []byte, is ...any) int {
-	return NewDecoderWithPtr(is...).decode(buf, is...)
+	return NewDecoderWithPtr(is...).Decode(buf, is...)
 }
 
 func NewDecoderWithPtr(is ...any) *Decoder {
@@ -78,7 +78,7 @@ func (d *Decoder) reset() int {
 // It decodes the byte slice into the variables.
 // the arguments  must be a pointer type
 // The return value is the number of bytes that were decoded.
-func (d *Decoder) decode(buf []byte, is ...any) int {
+func (d *Decoder) Decode(buf []byte, is ...any) int {
 	d.buf = buf
 	engines := d.engines
 	for i := 0; i < len(engines) && i < len(is); i++ {

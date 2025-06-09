@@ -22,7 +22,7 @@ then you can pass in value directly,
 which serializes the value pointed to by value.
 */
 func Marshal(ps ...any) []byte {
-	return NewEncoderWithPtr(ps...).encode(ps...)
+	return NewEncoderWithPtr(ps...).Encode(ps...)
 }
 
 // 创建一个编码ps 指向类型的编码器
@@ -77,7 +77,7 @@ func (e *Encoder) Copy() *Encoder {
 }
 
 // 入参是要编码值的指针
-func (e *Encoder) encode(is ...any) []byte {
+func (e *Encoder) Encode(is ...any) []byte {
 	engines := e.engines
 	for i := 0; i < len(engines) && i < len(is); i++ {
 		engines[i](e, reflect.ValueOf(is[i]).UnsafePointer())

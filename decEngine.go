@@ -11,27 +11,27 @@ type decEng func(*Decoder, unsafe.Pointer) // 解码器
 
 var (
 	rt2decEng = map[reflect.Type]decEng{
-		reflect.TypeFor[bool]():       decBool,
-		reflect.TypeFor[int]():        decInt,
-		reflect.TypeFor[int8]():       decInt8,
-		reflect.TypeFor[int16]():      decInt16,
-		reflect.TypeFor[int32]():      decInt32,
-		reflect.TypeFor[int64]():      decInt64,
-		reflect.TypeFor[uint]():       decUint,
-		reflect.TypeFor[uint8]():      decUint8,
-		reflect.TypeFor[uint16]():     decUint16,
-		reflect.TypeFor[uint32]():     decUint32,
-		reflect.TypeFor[uint64]():     decUint64,
-		reflect.TypeFor[uintptr]():    decUintptr,
-		reflect.TypeFor[float32]():    decFloat32,
-		reflect.TypeFor[float64]():    decFloat64,
-		reflect.TypeFor[complex64]():  decComplex64,
-		reflect.TypeFor[complex128](): decComplex128,
-		reflect.TypeFor[[]byte]():     decBytes,
-		reflect.TypeFor[string]():     decString,
-		reflect.TypeFor[time.Time]():  decTime,
-		reflect.TypeFor[struct{}]():   decIgnore,
-		reflect.TypeOf(nil):           decIgnore,
+		reflect.TypeOf((*bool)(nil)).Elem():       decBool,
+		reflect.TypeOf((*int)(nil)).Elem():        decInt,
+		reflect.TypeOf((*int8)(nil)).Elem():       decInt8,
+		reflect.TypeOf((*int16)(nil)).Elem():      decInt16,
+		reflect.TypeOf((*int32)(nil)).Elem():      decInt32,
+		reflect.TypeOf((*int64)(nil)).Elem():      decInt64,
+		reflect.TypeOf((*uint)(nil)).Elem():       decUint,
+		reflect.TypeOf((*uint8)(nil)).Elem():      decUint8,
+		reflect.TypeOf((*uint16)(nil)).Elem():     decUint16,
+		reflect.TypeOf((*uint32)(nil)).Elem():     decUint32,
+		reflect.TypeOf((*uint64)(nil)).Elem():     decUint64,
+		reflect.TypeOf((*uintptr)(nil)).Elem():    decUintptr,
+		reflect.TypeOf((*float32)(nil)).Elem():    decFloat32,
+		reflect.TypeOf((*float64)(nil)).Elem():    decFloat64,
+		reflect.TypeOf((*complex64)(nil)).Elem():  decComplex64,
+		reflect.TypeOf((*complex128)(nil)).Elem(): decComplex128,
+		reflect.TypeOf((*[]byte)(nil)).Elem():     decBytes,
+		reflect.TypeOf((*string)(nil)).Elem():     decString,
+		reflect.TypeOf((*time.Time)(nil)).Elem():  decTime,
+		reflect.TypeOf((*struct{})(nil)).Elem():   decIgnore,
+		reflect.TypeOf(nil):                       decIgnore,
 	}
 
 	decEngines = []decEng{
@@ -146,8 +146,8 @@ func buildDecEngine(rt reflect.Type, engPtr *decEng) {
 					kEng(d, unsafe.Pointer(key.UnsafeAddr()))
 					vEng(d, unsafe.Pointer(val.UnsafeAddr()))
 					v.SetMapIndex(key, val)
-					key.SetZero()
-					val.SetZero()
+					key.Set(reflect.Zero(kt))
+					val.Set(reflect.Zero(vt))
 				}
 			} else if !isNil(p) {
 				*(*unsafe.Pointer)(p) = nil
